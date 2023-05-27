@@ -1,0 +1,11 @@
+[Default]
+emailusername = abdul@
+emailpassword = $$2027
+applicationusername = abdul@f
+applicationpassword = Password@5
+finboassourl = https://finboasso.azurewebsites.net
+disputedevapiurl = https://disputedevapi.azurewebsites.net
+disputedevurl = https://disputedev.azurewebsites.net
+finboaaccountv3 = https://finboaaccountv3.azurewebsites.net/
+finboaaccountapiv3 = https://finboaaccountapiv3.azurewebsites.net
+
