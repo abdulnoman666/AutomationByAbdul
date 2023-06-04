@@ -14,7 +14,7 @@ time.sleep(10)
 otp2 = read_email_from_gmail(email_user, email_password)
 updated_access_token = test_post_login_on_login_page(otp2)
 anti_forgery_token_sso = test_get_anti_forgery_token_sso_on_login_page(updated_access_token)
-anti_forgery_token = test_get_anti_forgery_token_on_login_page(access_token)
+anti_forgery_token = test_get_anti_forgery_token_on_login_page(updated_access_token)
 
 
 def test_get_brands_on_brands_page():
@@ -53,17 +53,15 @@ def test_post_add_brands_on_brands_page():
     brand_json = json.loads(brand)
     headers = {
         'Authorization': ('Bearer ' + updated_access_token),
+        'Cookie': f'xsrf-token={anti_forgery_token[0]}',
         'X-CSRF-Token': anti_forgery_token[1],
         'X-CSRF-Token-SSO': anti_forgery_token_sso
     }
 
-    cookies = {
-        'Cookie': f'xsrf-token={anti_forgery_token[0]}'
-    }
     print(headers)
-    print(cookies)
-    response4 = requests.post(url4, headers=headers, cookies=cookies, data=brand_json)
+    response4 = requests.post(url4, headers=headers, data=brand_json)
     print(response4.content)
+    print(response4.status_code)
     # assert response4.status_code == 200, 'Status Code is not 200 for test_post_add_brands_on_brands_page'
 
 
