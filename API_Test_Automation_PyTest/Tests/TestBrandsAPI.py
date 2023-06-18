@@ -45,9 +45,6 @@ def test_get_brands_editor_dialog_on_brands_page():
 
 
 def test_post_add_brands_on_brands_page():
-    # print("Cookie = " + anti_forgery_token[0])
-    # print("X-CSRF-Token-SSO = " + anti_forgery_token_sso)
-    # print("X-CSRF-Token = " + anti_forgery_token[1])
     url4 = configuration['disputedevapiurl'] + "/api/brand"
     brand = open("..\\TestData\\Brand.json", "r").read()
     brand_json = json.loads(brand)
@@ -57,15 +54,26 @@ def test_post_add_brands_on_brands_page():
         'X-CSRF-Token': anti_forgery_token[1],
         'X-CSRF-Token-SSO': anti_forgery_token_sso
     }
-
-    print(headers)
     response4 = requests.post(url4, headers=headers, data=brand_json)
-    print(response4.content)
-    print(response4.status_code)
-    # assert response4.status_code == 200, 'Status Code is not 200 for test_post_add_brands_on_brands_page'
+    assert response4.status_code == 200, 'Status Code is not 200 for test_post_add_brands_on_brands_page'
+    data = response4.json()
+    return data
+
+
+def test_post_delete_brands_on_brands_page(brands_json):
+    url5 = configuration['disputedevapiurl'] + "/api/brand/" + str(brands_json['id']) + "/delete"
+    headers = {
+        'Authorization': ('Bearer ' + updated_access_token),
+        'Cookie': f'xsrf-token={anti_forgery_token[0]}',
+        'X-CSRF-Token': anti_forgery_token[1],
+        'X-CSRF-Token-SSO': anti_forgery_token_sso
+    }
+    response5 = requests.post(url5, headers=headers, data=brands_json)
+    assert response5.status_code == 200, 'Status Code is not 200 for test_post_delete_brands_on_brands_page'
 
 
 test_get_brands_on_brands_page()
 test_get_brands_page_on_brands_page()
 test_get_brands_editor_dialog_on_brands_page()
-test_post_add_brands_on_brands_page()
+add_brand_json = test_post_add_brands_on_brands_page()
+test_post_delete_brands_on_brands_page(add_brand_json)
